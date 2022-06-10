@@ -1,8 +1,8 @@
 ### MQ MFT Setup and Configuration on OCP
 
 There are two sections:
-. Installation of the MQ Operator and creation of 4 QMGRs on OCP
-. Agent setup and testing on a Unix type of system
+- Installation of the MQ Operator and creation of 4 QMGRs on OCP
+- Agent setup and testing on a Unix type of system
 ---
 ### Installation and Setup of MQ on OCP ###
 
