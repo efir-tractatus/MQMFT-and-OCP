@@ -1,0 +1,71 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: mftdblogger
+spec:
+  lookupPolicy:
+    local: false
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: build-mft-db-logger
+  labels:
+    app: mftdblogger
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/bpaskin/MQMFT-and-OCP
+    contextDir: MFTDBLoggerJEE
+  strategy:
+    type: Docker                      
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: mftdblogger:latest
+---
+# IBM Operator Catalog
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-operator-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: ibm-operator-catalog 
+  publisher: IBM Content
+  sourceType: grpc
+  image: icr.io/cpopen/ibm-operator-catalog
+  updateStrategy:
+    registryPoll:
+      interval: 45m
+---
+# install WAS Liberty Operator
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: was-liberty
+spec:
+  installPlanApproval: Automatic
+  name: ibm-websphere-liberty
+  source: ibm-operator-catalog
+  sourceNamespace: openshift-marketplace
+---
+# Install Liberty App
+# Assuming cp4i is the namespace where installed
+apiVersion: liberty.websphere.ibm.com/v1
+kind: WebSphereLibertyApplication
+metadata:
+  name: mqft-db-logger
+spec:
+  license:
+    accept: true
+    edition: IBM WebSphere Application Server
+    metric: Virtual Processor Core (VPC)
+    productEntitlementSource: IBM Cloud Pak for Applications
+  applicationImage: 'image-registry.openshift-image-registry.svc:5000/cp4i/mftdblogger'
+  manageTLS: true
+  pullPolicy: Always
