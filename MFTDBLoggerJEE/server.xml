@@ -1,25 +1,24 @@
 <server description="MFT DB Logger">
 
-    <!-- Enable features -->
     <featureManager>
         <feature>jdbc-4.0</feature>
-        <feature>jpa-2.0</feature>
-        <feature>jms-2.0</feature>
-        <feature>mdb-3.2</feature>
-        <feature>ejbLite-3.2</feature>
-        <feature>wmqJmsClient-2.0</feature>
-        <feature>transportSecurity-1.0</feature>
-        <feature>localConnector-1.0</feature>
+		<feature>jpa-2.0</feature>
+		<feature>jms-2.0</feature>
+		<feature>mdb-3.2</feature>
+		<feature>ejbLite-3.2</feature>
+		<feature>wmqJmsClient-2.0</feature>
+		<feature>transportSecurity-1.0</feature>
+	    <feature>localConnector-1.0</feature>
     </featureManager>
 
     <httpEndpoint httpPort="-1" httpsPort="-1" id="defaultHttpEndpoint"/>
     
-    <ssl clientAuthenticationSupported="false" id="defaultSSLConfig" keyStoreRef="defaultKeyStore" trustStoreRef="defaultKeyStore"/>
-    <keyStore id="defaultKeyStore" location="${server.config.dir}/resources/security/key.p12" password="{aes}somepassword"/>   
-    
+    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" trustDefaultCerts="true" trustStoreRef="defaultKeyStore"/>
+    <keyStore id="defaultKeyStore" location="${server.config.dir}/resources/security/key.p12" password="${KEYSTORE_PASSWORD}"/>   
+        
     <variable name="wmqJmsClient.rar.location" value="${server.config.dir}/lib/wmq.jmsra.rar"/> 
-    
-    <authData id="FTECOORD-ID" password="{aes}mypassword" user="myuser"/>
+
+    <authData id="FTECOORD-ID" password="${MQ_PASSWORD}" user="${MQ_USER}"/>
 
     <jdbcDriver id="Oracle" javax.sql.XADataSource="oracle.jdbc.xa.client.OracleXADataSource">
         <library name="Oracle">
@@ -28,12 +27,12 @@
     </jdbcDriver>
 
     <dataSource id="wmqfte-database" jdbcDriverRef="Oracle" jndiName="jdbc/wmqfte-database" type="javax.sql.XADataSource">
-    	<properties.oracle URL="jdbc:oracle:thin:@otto.na.ad.atg.com:1521:ora10r2" databaseName="mydb" password="mypassword" user="myuser"/>
+    	<properties.oracle URL="j${DB_CONN_STRING}" password="${DB_PASSWORD}" user="${DB_USER}"/>
     	<connectionManager maxPoolSize="20" minPoolSize="0"/>
     </dataSource>
 
     <jmsActivationSpec authDataRef="FTECOORD-ID" id="com.ibm.wmqfte.databaselogger.jee.oracle/com.ibm.wmqfte.databaselogger.jee.ejb/DatabaseLoggerMDB">
-    	<properties.wmqJms applicationName="LOGGER1" channel="FTECOORD.SVRCON" clientId="MFTDBLogger" destinationRef="MFTLoggerTopic" destinationType="javax.jms.Topic" hostName="myhost" port="1414" queueManager="FTECOORD" subscriptionDurability="Durable" subscriptionName="SYSTEM.FTE.DATABASELOGGER.AUTO"/>
+    	<properties.wmqJms channel="${MQ_CHANNEL}" clientId="${MQ_CLIENT_ID}" destinationRef="MFTLoggerTopic" destinationType="javax.jms.Topic" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" subscriptionDurability="Durable" subscriptionName="SYSTEM.FTE.DATABASELOGGER.AUTO"/>
     </jmsActivationSpec>
 
     <jmsTopic id="MFTLoggerTopic" jndiName="jms/MFTLoggerTopic">
@@ -41,10 +40,25 @@
     </jmsTopic>
     
     <jmsQueue jndiName="jms/WMQFTEJEEDBLoggerRejectQueue">
-    	<properties.wmqJms baseQueueManagerName="FTECOORD" baseQueueName="SYSTEM.FTE.LOG.RJCT.LOGGER1"/>
+    	<properties.wmqJms baseQueueManagerName="${MQ_QMGR}" baseQueueName="SYSTEM.FTE.LOG.RJCT.${MQ_LOGGER_NAME}"/>
     </jmsQueue>
     
     <jmsQueueConnectionFactory containerAuthDataRef="FTECOORD-ID" jndiName="jms/WMQFTEJEEDBLoggerRejectQueueCF">
-    	<properties.wmqJms applicationName="LOGGER1" channel="FTECOORD.SVRCON" hostName="myhost" port="1414" queueManager="FTECOORD"/>
+    	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}"/>
     </jmsQueueConnectionFactory>
+    
+    <variable name="KEYSTORE_PASSWORD" value="{aes}AK4mDVyo0VJ3KJ68kFAXxkmwJCqE/+KLVg8j9npPfVTt"/>
+    <variable name="DB_CONN_STRING" value="jdbc:oracle:thin:@otto.na.ad.atg.com:1521:ora10r2"/>
+    <variable name="DB_USER" value="username"/>
+    <variable name="DB_PASSWORD" value="{aes}AAy6hBZh3hB+CFgAeXLLx33yBF4sSfMmPa7B2gD8BmNh"/>
+    <variable name="MQ_QMGR" value="FTECOORD"/>
+    <variable name="MQ_CHANNEL" value="FTECOORD.SVRCON"/>
+    <variable name="MQ_PORT" value="1414"/>
+    <variable name="MQ_HOST" value="lovecraft"/>
+    <variable name="MQ_CLIENT_ID" value="MFTLOGGER"/>
+    <variable name="MQ_USER" value="brian"/>
+    <variable name="MQ_PASSWORD" value="{aes}AOzmt0wiIePmFuynhPKgCk+CDlVCIOLor4FGjYqikVNZ"/>
+    <variable name="MQ_LOGGER_NAME" value="LOGGER1"/>
+    
+    
 </server>
