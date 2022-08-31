@@ -54,6 +54,25 @@ spec:
   source: ibm-operator-catalog
   sourceNamespace: openshift-marketplace
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+   name: mftdblogger-vars
+stringData:
+   KEYSTORE_PASSWORD: "{aes}AK4mDVyo0VJ3KJ68kFAXxkmwJCqE/+KLVg8j9npPfVTt"
+   DB_CONN_STRING: "jdbc:oracle:thin:@domain.com1521:ora10r2"
+   DB_USER: "username"
+   DB_PASSWORD: "{aes}AAy6hBZh3hB+CFgAeXLLx33yBF4sSfMmPa7B2gD8BmNh"
+   MQ_QMGR: "FTECOORD"
+   MQ_CHANNEL: "FTECOORD.SVRCON"
+   MQ_PORT: "1414"
+   MQ_HOST: "mMQHost"
+   MQ_CLIENT_ID: "MFTLOGGER"
+   MQ_USER: "myMQUSer"
+   MQ_PASSWORD: "{aes}AOzmt0wiIePmFuynhPKgC9d93sDlVCIOLor4FGjYqikVNZ"
+   MQ_LOGGER_NAME: "LOGGER1"
+type: Opaque
+---
 # Install Liberty App
 # Assuming cp4i is the namespace where installed
 apiVersion: liberty.websphere.ibm.com/v1
@@ -69,3 +88,12 @@ spec:
   applicationImage: 'image-registry.openshift-image-registry.svc:5000/cp4i/mftdblogger'
   manageTLS: true
   pullPolicy: Always
+  volumeMounts:
+  - mountPath: /config/variables/
+    name: variables
+    readOnly: true
+  volumes:
+  - name: variables
+    secret:
+      secretName: mftdblogger-vars
+
