@@ -20,7 +20,7 @@ The script will do the following:
 - Create 4 QMGRs based on the ConfigMap and Secrets
   - Coordination QMGR (FTECOORD)
   - Command QMGR (FTPCMD)
-  - Agent2 QMGR (FTEAGENT1)
+  - Agent1 QMGR (FTEAGENT1)
   - Agent2 QMGR (FTEAGENT2)
 - Make sure the Pods are running
 - Create the necessary Routes for the channels and export the hostname to a file called, `urls.sh`, that will be placed in the AgentSetup directory.
