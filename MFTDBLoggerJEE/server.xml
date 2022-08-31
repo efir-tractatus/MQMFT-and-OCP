@@ -1,7 +1,7 @@
 <server description="MFT DB Logger">
 
     <featureManager>
-        <feature>jdbc-4.0</feature>
+                <feature>jdbc-4.0</feature>
 		<feature>jpa-2.0</feature>
 		<feature>jms-2.0</feature>
 		<feature>mdb-3.2</feature>
@@ -45,19 +45,5 @@
     <jmsQueueConnectionFactory containerAuthDataRef="FTECOORD-ID" jndiName="jms/WMQFTEJEEDBLoggerRejectQueueCF">
     	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}"/>
     </jmsQueueConnectionFactory>
-    
-    <variable name="KEYSTORE_PASSWORD" value="{aes}AK4mDVyo0VJ3KJ68kFAXxkmwJCqE/+KLVg8j9npPfVTt"/>
-    <variable name="DB_CONN_STRING" value="jdbc:oracle:thin:@otto.na.ad.atg.com:1521:ora10r2"/>
-    <variable name="DB_USER" value="username"/>
-    <variable name="DB_PASSWORD" value="{aes}AAy6hBZh3hB+CFgAeXLLx33yBF4sSfMmPa7B2gD8BmNh"/>
-    <variable name="MQ_QMGR" value="FTECOORD"/>
-    <variable name="MQ_CHANNEL" value="FTECOORD.SVRCON"/>
-    <variable name="MQ_PORT" value="1414"/>
-    <variable name="MQ_HOST" value="lovecraft"/>
-    <variable name="MQ_CLIENT_ID" value="MFTLOGGER"/>
-    <variable name="MQ_USER" value="brian"/>
-    <variable name="MQ_PASSWORD" value="{aes}AOzmt0wiIePmFuynhPKgCk+CDlVCIOLor4FGjYqikVNZ"/>
-    <variable name="MQ_LOGGER_NAME" value="LOGGER1"/>
-    
     
 </server>
