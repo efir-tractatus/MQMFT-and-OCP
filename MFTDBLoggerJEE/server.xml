@@ -31,7 +31,7 @@
     </dataSource>
 
     <jmsActivationSpec authDataRef="FTECOORD-ID" id="com.ibm.wmqfte.databaselogger.jee.oracle/com.ibm.wmqfte.databaselogger.jee.ejb/DatabaseLoggerMDB">
-    	<properties.wmqJms channel="${MQ_CHANNEL}" clientId="${MQ_CLIENT_ID}" destinationRef="MFTLoggerTopic" destinationType="javax.jms.Topic" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" subscriptionDurability="Durable" subscriptionName="SYSTEM.FTE.DATABASELOGGER.AUTO"/>
+    	<properties.wmqJms channel="${MQ_CHANNEL}" clientId="${MQ_CLIENT_ID}" destinationRef="MFTLoggerTopic" destinationType="javax.jms.Topic" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" subscriptionDurability="Durable" subscriptionName="SYSTEM.FTE.DATABASELOGGER.AUTO" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
     </jmsActivationSpec>
 
     <jmsTopic id="MFTLoggerTopic" jndiName="jms/MFTLoggerTopic">
@@ -43,7 +43,7 @@
     </jmsQueue>
     
     <jmsQueueConnectionFactory containerAuthDataRef="FTECOORD-ID" jndiName="jms/WMQFTEJEEDBLoggerRejectQueueCF">
-    	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}"/>
+    	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
     </jmsQueueConnectionFactory>
     
 </server>
