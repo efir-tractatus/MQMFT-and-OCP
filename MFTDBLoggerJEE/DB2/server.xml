@@ -1,0 +1,49 @@
+<server description="MFT DB Logger">
+
+    <featureManager>
+        <feature>jdbc-4.0</feature>
+		<feature>jpa-2.0</feature>
+		<feature>jms-2.0</feature>
+		<feature>mdb-3.2</feature>
+		<feature>ejbLite-3.2</feature>
+		<feature>wmqJmsClient-2.0</feature>
+		<feature>transportSecurity-1.0</feature>
+    </featureManager>
+
+    <httpEndpoint httpPort="-1" httpsPort="-1" id="defaultHttpEndpoint"/>
+    
+    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" trustDefaultCerts="true" trustStoreRef="defaultKeyStore"/>
+    <keyStore id="defaultKeyStore" location="${server.config.dir}/resources/security/key.p12" password="${KEYSTORE_PASSWORD}"/>   
+        
+    <variable name="wmqJmsClient.rar.location" value="${server.config.dir}/lib/wmq.jmsra.rar"/> 
+
+    <authData id="FTECOORD-ID" password="${MQ_PASSWORD}" user="${MQ_USER}"/>
+
+    <jdbcDriver id="DB2" javax.sql.XADataSource="com.ibm.db2.jcc.DB2XADataSource">
+        <library name="DB2">
+            <fileset dir="${server.config.dir}/lib" includes="*.jar"/>
+        </library>
+    </jdbcDriver>
+    
+    <dataSource id="wmqfte-database" jdbcDriverRef="DB2"
+        jndiName="jdbc/wmqfte-database" type="javax.sql.XADataSource" isolationLevel="TRANSACTION_READ_COMMITTED" containerAuthDataRef="FTECOORD-ID">
+        <properties.db2.jcc serverName="${DB_SERVER}" portNumber="${DB_PORT}" databaseName="${DB_DATABASE}" sslConnection="true" user="${DB_USER}" password="${DB_PASSWORD}"/>
+    </dataSource>
+
+    <jmsActivationSpec authDataRef="FTECOORD-ID" id="com.ibm.wmqfte.databaselogger.jee.oracle/com.ibm.wmqfte.databaselogger.jee.ejb/DatabaseLoggerMDB">
+    	<properties.wmqJms channel="${MQ_CHANNEL}" clientId="${MQ_CLIENT_ID}" destinationRef="MFTLoggerTopic" destinationType="javax.jms.Topic" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" subscriptionDurability="Durable" subscriptionName="SYSTEM.FTE.DATABASELOGGER.AUTO" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
+    </jmsActivationSpec>
+
+    <jmsTopic id="MFTLoggerTopic" jndiName="jms/MFTLoggerTopic">
+    	<properties.wmqJms baseTopicName="SYSTEM.FTE/Log/#"/>
+    </jmsTopic>
+    
+    <jmsQueue jndiName="jms/WMQFTEJEEDBLoggerRejectQueue">
+    	<properties.wmqJms baseQueueManagerName="${MQ_QMGR}" baseQueueName="SYSTEM.FTE.LOG.RJCT.${MQ_LOGGER_NAME}"/>
+    </jmsQueue>
+    
+    <jmsQueueConnectionFactory containerAuthDataRef="FTECOORD-ID" jndiName="jms/WMQFTEJEEDBLoggerRejectQueueCF">
+    	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
+    </jmsQueueConnectionFactory>
+    
+</server>
