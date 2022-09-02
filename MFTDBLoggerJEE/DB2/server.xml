@@ -1,7 +1,7 @@
 <server description="MFT DB Logger">
 
     <featureManager>
-        <feature>jdbc-4.0</feature>
+                <feature>jdbc-4.0</feature>
 		<feature>jpa-2.0</feature>
 		<feature>jms-2.0</feature>
 		<feature>mdb-3.2</feature>
@@ -45,5 +45,6 @@
     <jmsQueueConnectionFactory containerAuthDataRef="FTECOORD-ID" jndiName="jms/WMQFTEJEEDBLoggerRejectQueueCF">
     	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
     </jmsQueueConnectionFactory>
-    
+	
+    <logging traceSpecification="JMSApi=all:WAS.j2c=all:"/>
 </server>
