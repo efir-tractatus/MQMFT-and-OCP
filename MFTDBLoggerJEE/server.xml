@@ -35,7 +35,7 @@
     </jmsActivationSpec>
 
     <jmsTopic id="MFTLoggerTopic" jndiName="jms/MFTLoggerTopic">
-    	<properties.wmqJms baseTopicName="SYSTEM.FTE/#"/>
+    	<properties.wmqJms baseTopicName="SYSTEM.FTE/Log/#"/>
     </jmsTopic>
     
     <jmsQueue jndiName="jms/WMQFTEJEEDBLoggerRejectQueue">
