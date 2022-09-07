@@ -27,7 +27,7 @@
     
     <dataSource id="wmqfte-database" jdbcDriverRef="DB2"
         jndiName="jdbc/wmqfte-database" type="javax.sql.XADataSource" isolationLevel="TRANSACTION_READ_COMMITTED" containerAuthDataRef="FTECOORD-ID">
-        <properties.db2.jcc serverName="${DB_SERVER}" portNumber="${DB_PORT}" databaseName="${DB_DATABASE}" sslConnection="true" user="${DB_USER}" password="${DB_PASSWORD}"/>
+        <properties.db2.jcc serverName="${DB_SERVER}" portNumber="${DB_PORT}" databaseName="${DB_DATABASE}" sslConnection="false" user="${DB_USER}" password="${DB_PASSWORD}"/>
     </dataSource>
 
     <jmsActivationSpec authDataRef="FTECOORD-ID" id="com.ibm.wmqfte.databaselogger.jee/com.ibm.wmqfte.databaselogger.jee.ejb/DatabaseLoggerMDB">
