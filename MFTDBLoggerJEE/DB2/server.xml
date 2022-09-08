@@ -46,5 +46,5 @@
     	<properties.wmqJms channel="${MQ_CHANNEL}" hostName="${MQ_HOST}" port="${MQ_PORT}" queueManager="${MQ_QMGR}" sslCipherSuite="TLS_AES_128_GCM_SHA256"/>
     </jmsQueueConnectionFactory>
 	
-    <logging traceSpecification="JMSApi=all:WAS.j2c=all:"/>
+    <logging traceSpecification="JMSApi=all:WAS.j2c=all:com.ibm.wmqfte.databaselogger.jee.ejb=all"/>
 </server>
