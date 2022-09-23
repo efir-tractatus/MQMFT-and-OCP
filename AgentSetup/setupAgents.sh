@@ -160,7 +160,7 @@ mkdir -p /tmp/agent2/received
 echo "Funeral Winter" > /tmp/agent1/dropins/test.txt
 
 echo -n "Testing file transfer ... "
-fteCreateTransfer -sa $AGENT1_NAME -da $AGENT2_NAME -df /tmp/agent2/received/dest.txt  /tmp/agent1/dropins/test.txt >> /tmp/ftesetup.log 2>&1
+$MQ_HOME/bin/fteCreateTransfer -sa $AGENT1_NAME -da $AGENT2_NAME -df /tmp/agent2/received/dest.txt  /tmp/agent1/dropins/test.txt >> /tmp/ftesetup.log 2>&1
 check_status $?
 
 sleep 5
